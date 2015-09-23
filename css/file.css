@@ -1,6 +1,63 @@
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.admin_panel {
+    border-bottom: 1px solid black;
+}
 .file {
     font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
 }
-.file_title {
+.file form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+}
+.file_title, .file_title_edit {
     border-bottom: 1px solid black;
+    padding: 5px;
+    margin: 0;
+}
+.file_title_edit {
+    display: flex;
+}
+.file_title_edit input[type="text"] {
+    flex: 1 1;
+}
+.file_title_edit input {
+    margin: 0 5px;
+}
+.editor {
+    flex: 1 1 auto;
+    display: flex;
+    margin-top: 5px;
+}
+#file_edit_contain, #file_md {
+    flex: 1 1;
+}
+#file_edit_contain {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+#file_md_edit {
+    outline: none;
+    border: none;
+    resize: none;
+    flex: 1;
+}
+#dummyTextarea {
+    visibility: hidden;
+    position: absolute;
+    width: 100%;
+    height: 30px;
+}
+.editor #file_md {
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid black;
 }

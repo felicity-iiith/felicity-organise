@@ -11,3 +11,7 @@ $cfg = array(
     'db_pass'               => 'password',
     'db_name'               => 'dbname',
 );
+
+$admins = [
+    // List of user ids of admins
+];

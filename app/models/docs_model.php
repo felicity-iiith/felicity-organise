@@ -24,6 +24,20 @@ class docs_model extends Model {
         return true;
     }
 
+    function update_file($file_id, $name, $slang, $data) {
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("UPDATE `files` SET `name`=?, `slang`=?, `data`=? WHERE `id`=?");
+        if (!$stmt->bind_param("sssi", $name, $slang, $data, $file_id)) {
+            return false;
+        }
+        if (!$stmt->execute()) {
+            return false;
+        }
+        return true;
+    }
+
     function get_slang_id($parent, $slang) {
         $stmt = $this->DB->prepare("SELECT `id` FROM `files` WHERE `parent`=? AND `slang`=?");
         if (!$stmt->bind_param("is", $parent, $slang)) {
@@ -50,7 +64,23 @@ class docs_model extends Model {
         return $parent;
     }
 
+    function get_file_path($file_id) {
+        if ($file_id === false) {
+            return false;
+        }
+        $path = '/';
+        do {
+            $file = $this->get_file($file_id);
+            $file_id = $file['parent'];
+            $path = '/' .$file['slang'] . $path;
+        } while($file_id !== 0);
+        return $path;
+    }
+
     function get_file_type($file_id) {
+        if ($file_id === false) {
+            return false;
+        }
         $stmt = $this->DB->prepare("SELECT `type` FROM `files` WHERE `id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
@@ -65,7 +95,11 @@ class docs_model extends Model {
     }
 
     function get_directory($file_id) {
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `type` FROM `files` WHERE `parent`=?");
+        // Get list of files in directory
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `parent`, `type` FROM `files` WHERE `parent`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
@@ -77,7 +111,11 @@ class docs_model extends Model {
     }
 
     function get_file($file_id) {
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `data` FROM `files` WHERE `id`=?");
+        // Get details of file
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `parent`, `data` FROM `files` WHERE `id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
