@@ -31,7 +31,7 @@ class docs extends Controller {
             $this->http->redirect(base_url() . "docs" . $path . "edit/");
         }
 
-        if (!empty($_POST["add"]) && !empty($_POST["parent_id"])
+        if (!empty($_POST["add"]) && isset($_POST["parent_id"])
             && !empty($_POST["name"]) && !empty($_POST["slang"]))
         {
             $parent_id = $_POST["parent_id"];
@@ -56,6 +56,7 @@ class docs extends Controller {
         if ($this->is_admin && count($path)
             && $path[count($path) - 1] == "edit")
         {
+            array_pop($path);
             $edit = true;
         }
 
