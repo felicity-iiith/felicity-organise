@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
+        <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/directory.css">
     </head>
     <body>

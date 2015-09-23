@@ -3,9 +3,13 @@
     <head>
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
+        <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/directory.css">
     </head>
     <body>
+        <nav>
+            <a href="..">Go back to directory</a>
+        </nav>
         <div class="error"><?= $error ?></div>
         <form action="" method="post">
             <h1>Rename Directory</h1>

@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
+        <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
         <script>
             mdText = '';
@@ -34,6 +35,9 @@
         </script>
     </head>
     <body onload="setupEdit()">
+        <nav>
+            <a href="..">Go back to file (Discard changes)</a>
+        </nav>
         <div class="error"><?= $error ?></div>
         <article class="file">
             <form action="" method="post">

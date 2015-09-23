@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
+        <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
     </head>
     <body>
@@ -16,6 +17,9 @@
         <?php
             endif;
         ?>
+        <nav>
+            <a href="..">Go back to directory</a>
+        </nav>
         <article class="file">
             <h1 class="file_title"><?= $name ?></h1>
             <section id="file_md" class="file_content"><?= $data ?></section>

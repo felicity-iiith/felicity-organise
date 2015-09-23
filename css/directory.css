@@ -1,12 +1,6 @@
-.admin_panel {
-    border-bottom: 1px solid black;
-}
 .dir {
     font-family: sans-serif;
 }
 .dir_title {
     border-bottom: 1px solid black;
-}
-.error {
-    color: red;
 }
