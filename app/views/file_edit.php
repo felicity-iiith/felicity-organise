@@ -34,6 +34,7 @@
         </script>
     </head>
     <body onload="setupEdit()">
+        <div class="error"><?= $error ?></div>
         <article class="file">
             <form action="" method="post">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>

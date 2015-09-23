@@ -2,20 +2,9 @@
 
 class docs_model extends Model {
 
-    function new_directory($parent, $name, $slang, $user) {
-        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slang`, `parent`, `type`, `created_by`) VALUES (?, ?, ?, 'directory', ?)");
-        if (!$stmt->bind_param("ssis", $name, $slang, $parent, $user)) {
-            return false;
-        }
-        if (!$stmt->execute()) {
-            return false;
-        }
-        return true;
-    }
-
-    function new_file($parent, $name, $slang, $data, $user) {
-        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slang`, `parent`, `type`, `data`, `created_by`) VALUES (?, ?, ?, 'file',? ,?)");
-        if (!$stmt->bind_param("ssiss", $name, $slang, $parent, $data, $user)) {
+    function new_file($parent, $name, $slang, $type, $user) {
+        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slang`, `parent`, `type`, `created_by`) VALUES (?, ?, ?, ?, ?)");
+        if (!$stmt->bind_param("ssiss", $name, $slang, $parent, $type, $user)) {
             return false;
         }
         if (!$stmt->execute()) {
