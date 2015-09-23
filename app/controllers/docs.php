@@ -54,9 +54,8 @@ class docs extends Controller {
 
         $edit = false;
         if ($this->is_admin && count($path)
-            && in_array($path[count($path) - 1], ["edit", "new"]))
+            && $path[count($path) - 1] == "edit")
         {
-            $action = array_pop($path);
             $edit = true;
         }
 
