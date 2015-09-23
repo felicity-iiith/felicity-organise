@@ -23,19 +23,19 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `slang` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
   `parent` int(11) NOT NULL,
   `type` enum('directory','file') NOT NULL,
   `data` blob NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniqueName` (`slang`,`parent`)
+  UNIQUE KEY `uniqueName` (`slug`,`parent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `files`
 --
 
-INSERT INTO `files` (`id`, `name`, `slang`, `parent`, `type`, `data`, `timestamp`, `created_by`) VALUES
+INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`, `data`, `timestamp`, `created_by`) VALUES
 (0, 'Felicity ''16', '', -1, 'directory', '', '2015-09-22 21:18:01', '');

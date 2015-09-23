@@ -44,7 +44,7 @@
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>"/>
-                    <label for="slang">Slang: </label><input type="text" name="slang" value="<?= $slang ?>" />
+                    <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" />
                     <input type="submit" name="save" value="Save page"/>
                 </div>
                 <div class="editor">

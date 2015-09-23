@@ -2,9 +2,9 @@
 
 class docs_model extends Model {
 
-    function new_file($parent, $name, $slang, $type, $user) {
-        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slang`, `parent`, `type`, `created_by`) VALUES (?, ?, ?, ?, ?)");
-        if (!$stmt->bind_param("ssiss", $name, $slang, $parent, $type, $user)) {
+    function new_file($parent, $name, $slug, $type, $user) {
+        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`, `created_by`) VALUES (?, ?, ?, ?, ?)");
+        if (!$stmt->bind_param("ssiss", $name, $slug, $parent, $type, $user)) {
             return false;
         }
         if (!$stmt->execute()) {
@@ -13,12 +13,12 @@ class docs_model extends Model {
         return true;
     }
 
-    function update_file($file_id, $name, $slang, $data) {
+    function update_file($file_id, $name, $slug, $data) {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("UPDATE `files` SET `name`=?, `slang`=?, `data`=? WHERE `id`=?");
-        if (!$stmt->bind_param("sssi", $name, $slang, $data, $file_id)) {
+        $stmt = $this->DB->prepare("UPDATE `files` SET `name`=?, `slug`=?, `data`=? WHERE `id`=?");
+        if (!$stmt->bind_param("sssi", $name, $slug, $data, $file_id)) {
             return false;
         }
         if (!$stmt->execute()) {
@@ -27,9 +27,9 @@ class docs_model extends Model {
         return true;
     }
 
-    function get_slang_id($parent, $slang) {
-        $stmt = $this->DB->prepare("SELECT `id` FROM `files` WHERE `parent`=? AND `slang`=?");
-        if (!$stmt->bind_param("is", $parent, $slang)) {
+    function get_slug_id($parent, $slug) {
+        $stmt = $this->DB->prepare("SELECT `id` FROM `files` WHERE `parent`=? AND `slug`=?");
+        if (!$stmt->bind_param("is", $parent, $slug)) {
             return false;
         }
         if (!$stmt->execute()) {
@@ -45,7 +45,7 @@ class docs_model extends Model {
         $path = array_filter($path);
         $parent = 0;
         foreach ($path as $component) {
-            $parent = $this->get_slang_id($parent, $component);
+            $parent = $this->get_slug_id($parent, $component);
             if ($parent === false) {
                 return false;
             }
@@ -61,7 +61,7 @@ class docs_model extends Model {
         do {
             $file = $this->get_file($file_id);
             $file_id = $file['parent'];
-            $path = '/' .$file['slang'] . $path;
+            $path = '/' .$file['slug'] . $path;
         } while($file_id !== 0);
         return $path;
     }
@@ -88,7 +88,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `parent`, `type` FROM `files` WHERE `parent`=?");
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `type` FROM `files` WHERE `parent`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
@@ -104,7 +104,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slang`, `parent`, `data` FROM `files` WHERE `id`=?");
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `data` FROM `files` WHERE `id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }

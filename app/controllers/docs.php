@@ -16,13 +16,13 @@ class docs extends Controller {
 
     private function edit() {
         if (!empty($_POST["save"]) && !empty($_POST["file_id"])
-            && !empty($_POST["name"]) && !empty($_POST["slang"]))
+            && !empty($_POST["name"]) && !empty($_POST["slug"]))
         {
             $file_id = $_POST["file_id"];
             $name = $_POST["name"];
-            $slang = $_POST["slang"];
+            $slug = $_POST["slug"];
             $data = $_POST["data"] ?: "";
-            $save = $this->docs_model->update_file($file_id, $name, $slang, $data);
+            $save = $this->docs_model->update_file($file_id, $name, $slug, $data);
             if ($save === false) {
                 return "Could not save file";
             }
@@ -32,19 +32,19 @@ class docs extends Controller {
         }
 
         if (!empty($_POST["add"]) && isset($_POST["parent_id"])
-            && !empty($_POST["name"]) && !empty($_POST["slang"]))
+            && !empty($_POST["name"]) && !empty($_POST["slug"]))
         {
             $parent_id = $_POST["parent_id"];
             $name = $_POST["name"];
-            $slang = $_POST["slang"];
+            $slug = $_POST["slug"];
             $type = $_POST["type"];
 
-            $add = $this->docs_model->new_file($parent_id, $name, $slang, $type, $this->user);
+            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $this->user);
             if ($add === false) {
                 return "Could not add file";
             }
 
-            $path = $this->docs_model->get_file_path($parent_id) . $slang . "/";
+            $path = $this->docs_model->get_file_path($parent_id) . $slug . "/";
             $this->http->redirect(base_url() . "docs" . $path . "edit/");
         }
     }

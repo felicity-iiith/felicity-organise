@@ -24,7 +24,7 @@
                         echo '<li><a href="..">(Go to parent)</a></li>';
                     }
                     foreach ($data as $file) {
-                        echo '<li><a href="' . $file['slang'] . '">' . $file['name'] . '</a></li>';
+                        echo '<li><a href="' . $file['slug'] . '">' . $file['name'] . '</a></li>';
                     }
                 ?>
 

@@ -15,7 +15,7 @@
             <h1>Rename Directory</h1>
             <input type="hidden" name="file_id" value="<?= $id ?>"/>
             <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>" /><br>
-            <label for="slang">Slang: </label><input type="text" name="slang" value="<?= $slang ?>" /><br>
+            <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" /><br>
             <input type="submit" name="save" value="Save"/>
         </form>
         <hr>
@@ -23,7 +23,7 @@
             <h1>Add file</h1>
             <input type="hidden" name="parent_id" value="<?= $id ?>"/>
             <label for="filename">Name: </label><input type="text" name="name" /><br>
-            <label for="slang">Slang: </label><input type="text" name="slang" /><br>
+            <label for="slug">Slug: </label><input type="text" name="slug" /><br>
             <label for="type">Type: </label>
             <select name="type">
                 <option value="directory">directory</option>
