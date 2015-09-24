@@ -45,13 +45,13 @@
             <form action="" method="post">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
                 <div class="file_title_edit">
-                    <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>"/>
-                    <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" />
+                    <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>" required />
+                    <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" required />
                     <input type="submit" class="btn btn-green" name="save" value="Save page"/>
                 </div>
                 <div class="editor">
                     <div id="file_edit_contain">
-                        <textarea id="file_md_edit" class="file_content" name="data"><?= $data ?></textarea>
+                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write you markdown text here." autofocus><?= $data ?></textarea>
                         <textarea id="dummyTextarea"></textarea>
                     </div>
                     <section id="file_md" class="file_content">

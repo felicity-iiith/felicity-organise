@@ -15,13 +15,14 @@ class docs extends Controller {
     }
 
     private function edit() {
-        if (!empty($_POST["save"]) && !empty($_POST["file_id"])
-            && !empty($_POST["name"]) && !empty($_POST["slug"]))
+        if (!empty($_POST["save"]) && isset($_POST["file_id"])
+            && !empty($_POST["name"])
+            && (!empty($_POST["slug"]) || $_POST["file_id"] == 0))
         {
             $file_id = $_POST["file_id"];
             $name = $_POST["name"];
-            $slug = $_POST["slug"];
-            $data = $_POST["data"] ?: "";
+            $slug = @$_POST["slug"] ?: "";
+            $data = @$_POST["data"] ?: "";
             $save = $this->docs_model->update_file($file_id, $name, $slug, $data);
             if ($save === false) {
                 return "Could not save file";

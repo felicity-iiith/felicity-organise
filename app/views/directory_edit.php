@@ -21,8 +21,8 @@
                     <form class="block" action="" method="post">
                         <h2>Add file/directory</h2>
                         <input type="hidden" name="parent_id" value="<?= $id ?>"/>
-                        <label for="name">Name: <input type="text" name="name" id="newname"/></label>
-                        <label for="slug">Slug: <input type="text" name="slug" id="newslug"/></label>
+                        <label for="name">Name: <input type="text" name="name" id="newname" required /></label>
+                        <label for="slug">Slug: <input type="text" name="slug" id="newslug" required /></label>
                         <label for="type">Type:
                             <select name="type">
                                 <option value="file">file</option>
@@ -37,8 +37,10 @@
                     <form class="block" action="" method="post">
                         <h2>Rename directory</h2>
                         <input type="hidden" name="file_id" value="<?= $id ?>"/>
-                        <label for="filename">Name: <input type="text" name="name" value="<?= $name ?>" /></label>
-                        <label for="slug">Slug: <input type="text" name="slug" value="<?= $slug ?>" /></label>
+                        <label for="filename">Name: <input type="text" name="name" value="<?= $name ?>" required /></label>
+                        <?php if ($id != 0): ?>
+                            <label for="slug">Slug: <input type="text" name="slug" value="<?= $slug ?>" required /></label>
+                        <?php endif; ?>
                         <input type="submit" class="btn-green" name="save" value="Save"/>
                     </form>
                 </div>

@@ -57,6 +57,9 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
+        if ($file_id == 0) {
+            return '/';
+        }
         $path = '/';
         do {
             $file = $this->get_file($file_id);
