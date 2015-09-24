@@ -24,9 +24,9 @@
                         <label for="name">Name: <input type="text" name="name" id="newname" required /></label>
                         <label for="slug">Slug: <input type="text" name="slug" id="newslug" required /></label>
                         <label for="type">Type:
-                            <select name="type">
-                                <option value="file">file</option>
-                                <option value="directory">directory</option>
+                            <select name="type" class="text-input">
+                                <option value="file">File</option>
+                                <option value="directory">Directory</option>
                             </select>
                         </label>
 
