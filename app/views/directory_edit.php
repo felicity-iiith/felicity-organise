@@ -11,11 +11,13 @@
     </head>
     <body>
         <div class="container">
-            <h1 class="file_title">Editing file: <?= $name ?></h1>
+            <h1 class="file_title">Editing directory: <?= $name ?></h1>
             <nav>
                 <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to directory</a>
             </nav>
+            <?php if ($error): ?>
             <div class="error"><?= $error ?></div>
+            <?php endif; ?>
             <div class="row">
                 <div class="col-6-12 padded" style="border-right: 1px solid #ccc;">
                     <form class="block" action="" method="post">

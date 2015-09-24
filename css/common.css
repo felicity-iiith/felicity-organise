@@ -7,3 +7,10 @@
 .admin_panel {
     display: inline-block;
 }
+.error {
+    padding: 5px;
+    color: red;
+}
+nav {
+    padding: 5px;
+}

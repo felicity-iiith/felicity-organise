@@ -40,7 +40,9 @@
         <nav>
             <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file (Discard changes)</a>
         </nav>
+        <?php if ($error): ?>
         <div class="error"><?= $error ?></div>
+        <?php endif; ?>
         <article class="file">
             <form action="" method="post">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
@@ -51,7 +53,7 @@
                 </div>
                 <div class="editor">
                     <div id="file_edit_contain">
-                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write you markdown text here." autofocus><?= $data ?></textarea>
+                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write your markdown text here." autofocus><?= $data ?></textarea>
                         <textarea id="dummyTextarea"></textarea>
                     </div>
                     <section id="file_md" class="file_content">

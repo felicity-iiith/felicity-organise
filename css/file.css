@@ -3,9 +3,6 @@ html, body {
     display: flex;
     flex-direction: column;
 }
-nav {
-    padding-bottom: 10px;
-}
 .file {
     font-family: sans-serif;
     display: flex;
@@ -19,6 +16,7 @@ nav {
 }
 
 .file_title_edit {
+    padding: 5px;
     align-items: center;
     display: flex;
 }
