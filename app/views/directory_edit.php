@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
+        <script src="<?= base_url() ?>js/common.js"></script>
         <link rel="stylesheet" href="<?= base_url() ?>css/thoda.min.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/directory.css">
@@ -20,8 +21,8 @@
                     <form class="block" action="" method="post">
                         <h2>Add file/directory</h2>
                         <input type="hidden" name="parent_id" value="<?= $id ?>"/>
-                        <label for="filename">Name: <input type="text" name="name" /></label>
-                        <label for="slug">Slug: <input type="text" name="slug" /></label>
+                        <label for="name">Name: <input type="text" name="name" id="newname"/></label>
+                        <label for="slug">Slug: <input type="text" name="slug" id="newslug"/></label>
                         <label for="type">Type:
                             <select name="type">
                                 <option value="file">file</option>
@@ -43,5 +44,18 @@
                 </div>
             </div>
         </div>
+        <script>
+            (function() {
+                var newname = document.getElementById("newname");
+
+                function updateSlug() {
+                    var newslug = document.getElementById("newslug");
+                    newslug.value = getSlug(newname.value);
+                }
+
+                newname.addEventListener('keyup', updateSlug);
+                newname.addEventListener('blur', updateSlug);
+            })();
+        </script>
     </body>
 </html>
