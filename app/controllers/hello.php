@@ -3,7 +3,7 @@
 class hello extends Controller {
 
     function index() {
-        echo "Welcome to Felicity'16 organise!";
+        $this->load_view('home');
     }
 
 }
