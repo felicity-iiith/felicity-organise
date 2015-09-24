@@ -1,6 +1,22 @@
-.dir {
-    font-family: sans-serif;
+.file_list {
+    width: 100%;
+    list-style: none;
+    padding: 0;
 }
-.dir_title {
-    border-bottom: 1px solid black;
+
+.file_list li a {
+    padding: .6em;
+    background-color: #f6f6f6;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    display: block;
+    transition: none;
+}
+
+.file_list li a:last-child {
+    border-bottom: 1px solid #ddd;
+}
+
+.file_list li a:hover {
+    border-color: #aaa;
 }

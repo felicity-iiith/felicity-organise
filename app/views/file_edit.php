@@ -4,8 +4,10 @@
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
+        <link rel="stylesheet" href="<?= base_url() ?>css/thoda.min.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <script>
             mdText = '';
             function setHeight(fieldId){
@@ -36,7 +38,7 @@
     </head>
     <body onload="setupEdit()">
         <nav>
-            <a href="..">Go back to file (Discard changes)</a>
+            <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file (Discard changes)</a>
         </nav>
         <div class="error"><?= $error ?></div>
         <article class="file">
@@ -45,7 +47,7 @@
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>"/>
                     <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" />
-                    <input type="submit" name="save" value="Save page"/>
+                    <input type="submit" class="btn btn-green" name="save" value="Save page"/>
                 </div>
                 <div class="editor">
                     <div id="file_edit_contain">

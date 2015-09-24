@@ -1,9 +1,9 @@
-nav {
+.dir_title,
+.file_title {
     border-bottom: 1px solid black;
+    display: inline-block;
 }
-.error {
-    color: red;
-}
+
 .admin_panel {
-    border-bottom: 1px solid black;
+    display: inline-block;
 }

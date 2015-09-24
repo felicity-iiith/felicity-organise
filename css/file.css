@@ -14,12 +14,9 @@ html, body {
     flex-direction: column;
     flex: 1 1;
 }
-.file_title, .file_title_edit {
-    border-bottom: 1px solid black;
-    padding: 5px;
-    margin: 0;
-}
+
 .file_title_edit {
+    align-items: center;
     display: flex;
 }
 .file_title_edit input[type="text"] {
