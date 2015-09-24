@@ -18,10 +18,10 @@
                 <div class="admin_panel padded text-right">
                     <a href="edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit</a>
                 </div>
-                <div class="list-interface">
                     <?php
                         endif;
                     ?>
+                    <div class="list-interface">
                     <?php
                         if ($parent != -1) {
                             echo '<a class="btn btn-blue" href="..">Go to parent <i class="fa fa-level-up"></i></a>';
