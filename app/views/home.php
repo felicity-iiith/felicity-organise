@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="container" style="width: 80%; font-size: 18px">
-            <article id="learnmore">
+            <article id="learnmore" style="padding-top: 10px;">
                 <h2>What is <code>/organise</code>?</h2>
                 <p>Facebook is a nice place for social networking, but not so much for documentation.</p>
                 <p>Google Forms are a great way to collect information, but either the form has to be public, or we have to manually add allowed emails.</p>
@@ -36,7 +36,7 @@
                 <p>We're not sure where this will go, but we're glad we can use it at least to share docs with you at the moment. Maybe this can be expanded to do all of these things and more in a future Felicity!</p>
 
                 <h2>This sounds cool! How do I get started?</h2>
-                <p>Well, for now, we're only releasing docs here. You can take a look at <a href="docs/">/docs</a> to see what we've released till now.</p>
+                <p>Well, for now, we're only releasing docs here. You can take a look at <a href="docs/">/organise/docs</a> to see what we've released till now.</p>
 
                 <p class="text-center padded" style="font-size:2em;">Let's make Felicity (more) awesome!</p>
             </article>
