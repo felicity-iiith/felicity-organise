@@ -24,14 +24,14 @@
         </div>
         <div class="container" style="width: 80%; font-size: 18px">
             <article id="learnmore">
-                <h2>What is <code>feli/organise</code>?</h2>
+                <h2>What is <code>/organise</code>?</h2>
                 <p>Facebook is a nice place for social networking, but not so much for documentation.</p>
                 <p>Google Forms are a great way to collect information, but either the form has to be public, or we have to manually add allowed emails.</p>
-                <p>We wanted a way to let only members of IIIT see documents related to Felicity and also give suggestions and fill forms. <code>felicity/organise</code> tries to solve this problem. Only people who can log in using <a href="https://login.iiit.ac.in/" target="_blank">login.iiit.ac.in</a> can access this part of the felicity website. We'll be putting up both docs and forms here, exclusively for IIITians.</p>
+                <p>We wanted a way to let only members of IIIT see documents related to Felicity and also give suggestions and fill forms. <code>/organise</code> tries to solve this problem. Only people who can log in using <a href="https://login.iiit.ac.in/" target="_blank">login.iiit.ac.in</a> can access this part of the felicity website. We'll be putting up both docs and forms here, exclusively for IIITians.</p>
 
                 <h2>Is that all?</h2>
                 <p>No, we certainly hope not.</p>
-                <p><code>feli/organise</code> was created to give us a platform to reach IIITians. While we have only two uses for which we needed it at the start, we're sure there will be more reasons to use it.</p>
+                <p><code>/organise</code> was created to give us a platform to reach IIITians. While we have only two uses for which we needed it at the start, we're sure there will be more reasons to use it.</p>
                 <p>Reviewing radical new ideas? A blog with details of what the Felicity Team is up to? Group chats for teams?</p>
                 <p>We're not sure where this will go, but we're glad we can use it at least to share docs with you at the moment. Maybe this can be expanded to do all of these things and more in a future Felicity!</p>
 
