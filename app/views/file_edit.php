@@ -9,25 +9,47 @@
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <script>
-            mdText = '';
+            var mdText = '',
+                origFile,
+                file_md_edit,
+                file_md, file_name_edit,
+                file_slug_edit,
+                dummyText,
+                ignore_change;
             function setHeight(fieldId){
-                var file_md_edit = document.getElementById('file_md_edit');
-                var dummy = document.getElementById('dummyTextarea');
-                dummy.value = file_md_edit.value;
+                dummyText.value = file_md_edit.value;
 
-                file_md_edit.style.height = (dummy.scrollHeight + 20) + 'px';
+                file_md_edit.style.height = (dummyText.scrollHeight + 20) + 'px';
             }
             function updateMD () {
+                // Update ignore changes button
+                if (origFile.name != file_name_edit.value
+                    || origFile.slug != file_slug_edit.value
+                    || origFile.data != file_md_edit.value
+                ) {
+                    ignore_change.innerHTML = "(Discard changes)";
+                } else {
+                    ignore_change.innerHTML = "";
+                }
+                // Set height of textarea
                 setHeight();
                 // Convert markdown
-                var file_md = document.getElementById('file_md');
-                var file_md_edit = document.getElementById('file_md_edit');
                 if (mdText == file_md_edit.value) return;
                 mdText = file_md_edit.value;
                 file_md.innerHTML = marked(mdText);
             }
             function setupEdit() {
-                var file_md_edit = document.getElementById('file_md_edit');
+                file_md_edit = document.getElementById('file_md_edit');
+                file_md = document.getElementById('file_md');
+                file_name_edit = document.getElementById('editname');
+                file_slug_edit = document.getElementById('editslug');
+                dummyText = document.getElementById('dummyTextarea');
+                ignore_change = document.getElementById('ignore_change');
+                origFile = {
+                    name: file_name_edit.value,
+                    slug: file_slug_edit.value,
+                    data: file_md_edit.value,
+                };
                 file_md_edit.addEventListener('keypress', setHeight);
                 file_md_edit.addEventListener('keyup', setHeight);
 
@@ -38,7 +60,7 @@
     </head>
     <body onload="setupEdit()">
         <nav>
-            <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file (Discard changes)</a>
+            <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file <span id="ignore_change"></span></a>
         </nav>
         <?php if ($error): ?>
         <div class="error"><?= $error ?></div>
@@ -47,8 +69,8 @@
             <form action="" method="post">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
                 <div class="file_title_edit">
-                    <label for="filename">Name: </label><input type="text" name="name" value="<?= $name ?>" required />
-                    <label for="slug">Slug: </label><input type="text" name="slug" value="<?= $slug ?>" required />
+                    <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= $name ?>" required />
+                    <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= $slug ?>" required />
                     <input type="submit" class="btn btn-green" name="save" value="Save page"/>
                 </div>
                 <div class="editor">
