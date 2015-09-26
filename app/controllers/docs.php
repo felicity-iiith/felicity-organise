@@ -23,7 +23,7 @@ class docs extends Controller {
             $name = $_POST["name"];
             $slug = @$_POST["slug"] ?: "";
             $data = @$_POST["data"] ?: "";
-            $save = $this->docs_model->update_file($file_id, $name, $slug, $data);
+            $save = $this->docs_model->update_file($file_id, $name, $slug, $data, $this->user);
             if ($save === false) {
                 return "Could not save file";
             }
@@ -53,19 +53,21 @@ class docs extends Controller {
     function read() {
         $path = func_get_args();
 
-        $edit = false;
-        if ($this->is_admin && count($path)
-            && $path[count($path) - 1] == "edit")
-        {
-            array_pop($path);
-            $edit = true;
+        $action = false;
+        if (count($path)
+            && in_array($path[count($path) - 1], ["edit", "history"])
+        ) {
+            $action = array_pop($path);
+            if ($action == "edit" && !$this->is_admin) {
+                $action = false;
+            }
         }
 
         $file_id = $this->docs_model->get_path_id($path);
         $file_type = $this->docs_model->get_file_type($file_id);
         $file = $this->docs_model->get_file($file_id);
 
-        if ($this->is_admin && $edit) {
+        if ($this->is_admin && $action == 'edit') {
             $error = $this->edit();
 
             if ($file_type == "directory") {
@@ -73,7 +75,24 @@ class docs extends Controller {
                 $this->load_view("directory_edit", $file);
             } else if ($file_type == "file") {
                 $file["error"] = $error;
+                $file["data"] = $this->docs_model->get_file_data($file_id);
                 $this->load_view("file_edit", $file);
+            } else {
+                $this->http->err_404();
+            }
+        } else if ($action == 'history'){
+            if ($file_type == "file") {
+                $file["history"] = $this->docs_model->get_history($file_id);
+
+                $file["is_admin"] = $this->is_admin;
+                if ($this->is_admin && isset($_GET["id"])) {
+                    $edit_id = $_GET["id"];
+                    $file["history_item"] = $this->docs_model->get_history_item($file_id, $edit_id);
+                } else if (isset($_GET["id"])) {
+                    $file["perm_error"] = true;
+                }
+
+                $this->load_view("file_history", $file);
             } else {
                 $this->http->err_404();
             }
@@ -83,6 +102,7 @@ class docs extends Controller {
                 $file["is_admin"] = $this->is_admin;
                 $this->load_view("directory", $file);
             } else if ($file_type == "file") {
+                $file["data"] = $this->docs_model->get_file_data($file_id);
                 $file["is_admin"] = $this->is_admin;
                 $this->load_view("file", $file);
             } else {

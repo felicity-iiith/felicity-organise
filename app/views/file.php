@@ -15,15 +15,16 @@
             </nav>
             <article class="file">
                 <h1 class="file_title"><?= $name ?></h1>
-                <?php
-                    if ($is_admin):
-                ?>
                 <aside class="admin_panel padded text-right">
+                    <?php
+                        if ($is_admin):
+                    ?>
                     <a href="edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit</a>
+                    <?php
+                        endif;
+                    ?>
+                    <a href="history" id="history-btn" class="btn btn-blue"><i class="fa fa-history"></i> History</a>
                 </aside>
-                <?php
-                    endif;
-                ?>
                 <section id="file_md" class="file_content"><?= $data ?></section>
             </article>
         </div>

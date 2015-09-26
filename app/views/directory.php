@@ -27,7 +27,7 @@
                             echo '<a class="btn btn-blue" href="..">Go to parent <i class="fa fa-level-up"></i></a>';
                         }
                     ?>
-                    <ul class="file_list">
+                    <ul class="item_list">
                         <?php foreach ($data as $file): ?>
                                 <li>
                                     <a href="<?= $file['slug'] ?>">
@@ -45,7 +45,7 @@
             </article>
         </div>
         <script>
-        var links = document.querySelectorAll('.file_list a');
+        var links = document.querySelectorAll('.item_list a');
         for (i = 0; i < links.length; ++i) {
             links[i].addEventListener('mouseenter', function() {
                 var icon = this.querySelector('i');
