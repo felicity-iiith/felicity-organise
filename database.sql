@@ -66,4 +66,4 @@ CREATE TABLE IF NOT EXISTS `file_permissions` (
   `permissions` enum('admin') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueUser` (`file_id`,`user`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
