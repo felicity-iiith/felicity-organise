@@ -14,6 +14,10 @@ class docs extends Controller {
         $this->is_admin = $this->auth_model->is_admin($this->user);
     }
 
+    private function is_slug_valid($slug) {
+        return preg_match('/^[a-z0-9-_]+$/i', $slug);
+    }
+
     private function edit() {
         if (!empty($_POST["save"]) && isset($_POST["file_id"])
             && !empty($_POST["name"])
@@ -23,6 +27,11 @@ class docs extends Controller {
             $name = $_POST["name"];
             $slug = @$_POST["slug"] ?: "";
             $data = @$_POST["data"] ?: "";
+
+            if ($slug && !$this->is_slug_valid($slug)) {
+                return "Invalid slug";
+            }
+
             $save = $this->docs_model->update_file($file_id, $name, $slug, $data, $this->user);
             if ($save === false) {
                 return "Could not save file";
@@ -39,6 +48,10 @@ class docs extends Controller {
             $name = $_POST["name"];
             $slug = $_POST["slug"];
             $type = $_POST["type"];
+
+            if (!$this->is_slug_valid($slug)) {
+                return "Invalid slug";
+            }
 
             $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $this->user);
             if ($add === false) {
