@@ -17,8 +17,8 @@ class docs extends Controller {
     private function edit() {
         if (!empty($_POST["save"]) && isset($_POST["file_id"])
             && !empty($_POST["name"])
-            && (!empty($_POST["slug"]) || $_POST["file_id"] == 0))
-        {
+            && (!empty($_POST["slug"]) || $_POST["file_id"] == 0)
+        ) {
             $file_id = $_POST["file_id"];
             $name = $_POST["name"];
             $slug = @$_POST["slug"] ?: "";
@@ -33,8 +33,8 @@ class docs extends Controller {
         }
 
         if (!empty($_POST["add"]) && isset($_POST["parent_id"])
-            && !empty($_POST["name"]) && !empty($_POST["slug"]))
-        {
+            && !empty($_POST["name"]) && !empty($_POST["slug"])
+        ) {
             $parent_id = $_POST["parent_id"];
             $name = $_POST["name"];
             $slug = $_POST["slug"];
@@ -48,6 +48,36 @@ class docs extends Controller {
             $path = $this->docs_model->get_file_path($parent_id) . $slug . "/";
             $this->http->redirect(base_url() . "docs" . $path . "edit/");
         }
+
+        if (!empty($_POST["add_user"]) && isset($_POST["file_id"])
+            && !empty($_POST["username"])
+        ) {
+            $file_id = $_POST["file_id"];
+            $username = $_POST["username"];
+
+            $add = $this->docs_model->add_admin($file_id, $username);
+            if ($add === false) {
+                return "Could not add user";
+            }
+
+            $path = $this->docs_model->get_file_path($file_id);
+            $this->http->redirect(base_url() . "docs" . $path . "edit/#useredit");
+        }
+
+        if (!empty($_POST["revoke_user"]) && isset($_POST["file_id"])
+            && !empty($_POST["username"])
+        ) {
+            $file_id = $_POST["file_id"];
+            $username = $_POST["username"];
+
+            $add = $this->docs_model->remove_admin($file_id, $username);
+            if ($add === false) {
+                return "Could not revoke permissions for user";
+            }
+
+            $path = $this->docs_model->get_file_path($file_id);
+            $this->http->redirect(base_url() . "docs" . $path . "edit/#useredit");
+        }
     }
 
     function read() {
@@ -58,23 +88,31 @@ class docs extends Controller {
             && in_array($path[count($path) - 1], ["edit", "history"])
         ) {
             $action = array_pop($path);
-            if ($action == "edit" && !$this->is_admin) {
-                $action = false;
-            }
         }
 
         $file_id = $this->docs_model->get_path_id($path);
         $file_type = $this->docs_model->get_file_type($file_id);
         $file = $this->docs_model->get_file($file_id);
 
-        if ($this->is_admin && $action == 'edit') {
+        $this->is_admin = $this->is_admin ||
+            $this->docs_model->has_permission($file_id, $this->user);
+
+        if ($action == 'edit') {
+            if (!$this->is_admin) {
+                $this->http->err_404();
+            }
+
             $error = $this->edit();
 
             if ($file_type == "directory") {
                 $file["error"] = $error;
+                $file["admins"] = $this->docs_model->get_admin_list($file_id);
+                $file["user"] = $this->user;
                 $this->load_view("directory_edit", $file);
             } else if ($file_type == "file") {
                 $file["error"] = $error;
+                $file["admins"] = $this->docs_model->get_admin_list($file_id);
+                $file["user"] = $this->user;
                 $file["data"] = $this->docs_model->get_file_data($file_id);
                 $this->load_view("file_edit", $file);
             } else {

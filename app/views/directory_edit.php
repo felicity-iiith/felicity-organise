@@ -39,13 +39,18 @@
                     <form class="block" action="" method="post">
                         <h2>Rename directory</h2>
                         <input type="hidden" name="file_id" value="<?= $id ?>"/>
-                        <label for="filename">Name: <input type="text" name="name" value="<?= $name ?>" required /></label>
+                        <label for="name">Name: <input type="text" name="name" value="<?= $name ?>" required /></label>
                         <?php if ($id != 0): ?>
                             <label for="slug">Slug: <input type="text" name="slug" value="<?= $slug ?>" required /></label>
                         <?php endif; ?>
                         <input type="submit" class="btn-green" name="save" value="Save"/>
                     </form>
                 </div>
+            </div>
+            <div class="row">
+                <?php
+                    $this->load_fragment('user_edit');
+                ?>
             </div>
         </div>
         <script>

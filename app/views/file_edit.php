@@ -55,18 +55,23 @@
 
                 updateMD();
                 window.setInterval(updateMD, 1000);
+
+                if (!window.location.hash) {
+                    file_md_edit.focus();
+                }
             }
         </script>
     </head>
     <body onload="setupEdit()">
         <nav>
             <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file <span id="ignore_change"></span></a>
+            <a class="btn btn-blue" href="#useredit"><i class="fa fa-user"></i> Edit user permissions (scroll down) <span id="ignore_change"></span></a>
         </nav>
         <?php if ($error): ?>
         <div class="error"><?= $error ?></div>
         <?php endif; ?>
         <article class="file">
-            <form action="" method="post">
+            <form action="" method="post" class="file_edit">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= $name ?>" required />
@@ -75,7 +80,7 @@
                 </div>
                 <div class="editor">
                     <div id="file_edit_contain">
-                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write your markdown text here." autofocus><?= $data ?></textarea>
+                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write your markdown text here." ><?= $data ?></textarea>
                         <textarea id="dummyTextarea"></textarea>
                     </div>
                     <section id="file_md" class="file_content">
@@ -83,6 +88,9 @@
                     </section>
                 </div>
             </form>
+            <?php
+                $this->load_fragment('user_edit');
+            ?>
         </article>
     </body>
 </html>

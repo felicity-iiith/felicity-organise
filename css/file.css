@@ -9,7 +9,7 @@ html, body {
     flex-direction: column;
     flex: 1 1;
 }
-.file form {
+.file .file_edit {
     display: flex;
     flex-direction: column;
     flex: 1 1;
