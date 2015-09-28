@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 27, 2015 at 01:31 AM
+-- Generation Time: Sep 29, 2015 at 02:09 AM
 -- Server version: 5.5.44-0ubuntu0.14.04.1-log
--- PHP Version: 5.5.9-1ubuntu4.11
+-- PHP Version: 5.5.9-1ubuntu4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -52,3 +52,18 @@ CREATE TABLE IF NOT EXISTS `file_data` (
   `created_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `file_permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `file_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `permissions` enum('admin') NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniqueUser` (`file_id`,`user`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
