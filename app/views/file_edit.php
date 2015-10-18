@@ -4,8 +4,10 @@
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
+        <script src="<?= base_url() ?>js/common_edit.js"></script>
         <link rel="stylesheet" href="<?= base_url() ?>css/thoda.min.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
+        <link rel="stylesheet" href="<?= base_url() ?>css/common_edit.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <script>
@@ -90,6 +92,9 @@
             </form>
             <?php
                 $this->load_fragment('user_edit');
+            ?>
+            <?php
+                $this->load_fragment('delete_file');
             ?>
         </article>
     </body>

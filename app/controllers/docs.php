@@ -53,7 +53,7 @@ class docs extends Controller {
                 return "Invalid slug";
             }
 
-            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $this->user);
+            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type);
             if ($add === false) {
                 return "Could not add file";
             }
@@ -91,6 +91,28 @@ class docs extends Controller {
             $path = $this->docs_model->get_file_path($file_id);
             $this->http->redirect(base_url() . "docs" . $path . "edit/#useredit");
         }
+
+        if (!empty($_POST["delete_file"]) && isset($_POST["file_id"])) {
+            $file_id = $_POST["file_id"];
+            $file = $this->docs_model->get_file($file_id);
+            $parent_id = @$file['parent'] ?: 0;
+            $file_type = @$file['type'] ?: false;
+
+            if ($file_type == 'directory') {
+                $file_list = $this->docs_model->get_directory($file_id);
+                if (count($file_list)) {
+                    return "Cannot delete non-empty directory";
+                }
+            }
+
+            $delete = $this->docs_model->delete_file($file_id, $this->user);
+            if ($delete === false) {
+                return "Could not delete " . $file_type;
+            }
+
+            $path = $this->docs_model->get_file_path($parent_id);
+            $this->http->redirect(base_url() . "docs" . $path);
+        }
     }
 
     function read() {
@@ -104,8 +126,8 @@ class docs extends Controller {
         }
 
         $file_id = $this->docs_model->get_path_id($path);
-        $file_type = $this->docs_model->get_file_type($file_id);
         $file = $this->docs_model->get_file($file_id);
+        $file_type = $file ? $file['type'] : false;
 
         $this->is_admin = $this->is_admin ||
             $this->docs_model->has_permission($file_id, $this->user);

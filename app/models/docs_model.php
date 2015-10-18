@@ -2,9 +2,9 @@
 
 class docs_model extends Model {
 
-    function new_file($parent, $name, $slug, $type, $user) {
-        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`, `created_by`) VALUES (?, ?, ?, ?, ?)");
-        if (!$stmt->bind_param("ssiss", $name, $slug, $parent, $type, $user)) {
+    function new_file($parent, $name, $slug, $type) {
+        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`) VALUES (?, ?, ?, ?)");
+        if (!$stmt->bind_param("ssis", $name, $slug, $parent, $type)) {
             return false;
         }
         if (!$stmt->execute()) {
@@ -40,6 +40,40 @@ class docs_model extends Model {
             if (!$stmt->execute()) {
                 $db_error = true;
             }
+        }
+
+        if ($db_error) {
+            $this->DB->rollback();
+        } else {
+            $this->DB->commit();
+        }
+
+        $this->DB->autocommit(true);
+        return !$db_error;
+    }
+
+    function delete_file($file_id, $user) {
+        if ($file_id === false || $file_id <= 0) {
+            return false;
+        }
+
+        $db_error = false;
+        $this->DB->autocommit(false);
+
+        $stmt = $this->DB->prepare("INSERT INTO `trash_files` (`file_id`, `name`, `slug`, `parent`, `type`, `created_by`) SELECT `id`, `name`, `slug`, `parent`, `type`, ? FROM `files` WHERE `id`=?");
+        if (!$stmt->bind_param("ss", $user, $file_id)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
+        $stmt = $this->DB->prepare("DELETE FROM `files` WHERE `id`=?");
+        if (!$stmt->bind_param("i", $file_id)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
         }
 
         if ($db_error) {
@@ -132,7 +166,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent` FROM `files` WHERE `id`=?");
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `type` FROM `files` WHERE `id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }

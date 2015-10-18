@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1-dev
+-- version 4.6.0-dev
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 29, 2015 at 02:09 AM
+-- Generation Time: Oct 18, 2015 at 11:57 PM
 -- Server version: 5.5.44-0ubuntu0.14.04.1-log
--- PHP Version: 5.5.9-1ubuntu4.12
+-- PHP Version: 5.5.9-1ubuntu4.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `files` (
   `slug` varchar(255) NOT NULL,
   `parent` int(11) NOT NULL,
   `type` enum('directory','file') NOT NULL,
-  `created_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueName` (`slug`,`parent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -66,4 +65,22 @@ CREATE TABLE IF NOT EXISTS `file_permissions` (
   `permissions` enum('admin') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueUser` (`file_id`,`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trash_files`
+--
+
+CREATE TABLE IF NOT EXISTS `trash_files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `parent` int(11) NOT NULL,
+  `type` enum('directory','file') NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_by` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
