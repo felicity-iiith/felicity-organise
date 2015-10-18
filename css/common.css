@@ -54,3 +54,7 @@ nav {
     display: block;
     transition: none;
 }
+
+li {
+    line-height: 1.45em;
+}
