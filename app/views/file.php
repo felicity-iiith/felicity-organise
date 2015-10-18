@@ -19,11 +19,11 @@
                     <?php
                         if ($is_admin):
                     ?>
-                    <a href="edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit</a>
+                    <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit</a>
                     <?php
                         endif;
                     ?>
-                    <a href="history" id="history-btn" class="btn btn-blue"><i class="fa fa-history"></i> History</a>
+                    <a href="?history" id="history-btn" class="btn btn-blue"><i class="fa fa-history"></i> History</a>
                 </aside>
                 <section id="file_md" class="file_content"><?= $data ?></section>
             </article>

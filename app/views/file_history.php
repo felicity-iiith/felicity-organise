@@ -15,7 +15,7 @@
     <body>
         <div class="container">
             <nav>
-                <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to file</a>
+                <a class="btn btn-blue" href="."><i class="fa fa-arrow-left"></i> Go back to file</a>
             </nav>
             <article class="file">
                 <h1 class="file_title"><?= $name ?></h1>
@@ -51,7 +51,7 @@
                         $time = date('d M, Y h:ia', strtotime($edit["timestamp"]));
                 ?>
                         <li>
-                            <a href="?id=<?= $edit["id"] ?>">
+                            <a href="?history&id=<?= $edit["id"] ?>">
                                 <i class="fa fa-history"></i>
                                 <?= $username ?><span style="color: #777"> edited on </span><?= $time ?>
                             </a>

@@ -15,7 +15,7 @@
         <div class="container">
             <h1 class="file_title">Editing directory: <?= $name ?></h1>
             <nav>
-                <a class="btn btn-blue" href=".."><i class="fa fa-arrow-left"></i> Go back to directory</a>
+                <a class="btn btn-blue" href="."><i class="fa fa-arrow-left"></i> Go back to directory</a>
             </nav>
             <?php if ($error): ?>
             <div class="error"><?= $error ?></div>

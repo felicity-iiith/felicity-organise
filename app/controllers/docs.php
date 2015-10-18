@@ -38,7 +38,7 @@ class docs extends Controller {
             }
 
             $path = $this->docs_model->get_file_path($file_id);
-            $this->http->redirect(base_url() . "docs" . $path . "edit/");
+            $this->http->redirect(base_url() . "docs" . $path . "?edit");
         }
 
         if (!empty($_POST["add"]) && isset($_POST["parent_id"])
@@ -59,7 +59,7 @@ class docs extends Controller {
             }
 
             $path = $this->docs_model->get_file_path($parent_id) . $slug . "/";
-            $this->http->redirect(base_url() . "docs" . $path . "edit/");
+            $this->http->redirect(base_url() . "docs" . $path . "?edit");
         }
 
         if (!empty($_POST["add_user"]) && isset($_POST["file_id"])
@@ -74,7 +74,7 @@ class docs extends Controller {
             }
 
             $path = $this->docs_model->get_file_path($file_id);
-            $this->http->redirect(base_url() . "docs" . $path . "edit/#useredit");
+            $this->http->redirect(base_url() . "docs" . $path . "?edit#useredit");
         }
 
         if (!empty($_POST["revoke_user"]) && isset($_POST["file_id"])
@@ -89,7 +89,7 @@ class docs extends Controller {
             }
 
             $path = $this->docs_model->get_file_path($file_id);
-            $this->http->redirect(base_url() . "docs" . $path . "edit/#useredit");
+            $this->http->redirect(base_url() . "docs" . $path . "?edit#useredit");
         }
 
         if (!empty($_POST["delete_file"]) && isset($_POST["file_id"])) {
@@ -119,10 +119,10 @@ class docs extends Controller {
         $path = func_get_args();
 
         $action = false;
-        if (count($path)
-            && in_array($path[count($path) - 1], ["edit", "history"])
-        ) {
-            $action = array_pop($path);
+        if (isset($_GET["edit"])) {
+            $action = "edit";
+        } else if (isset($_GET["history"])) {
+            $action = "history";
         }
 
         $file_id = $this->docs_model->get_path_id($path);
