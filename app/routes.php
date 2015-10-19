@@ -5,6 +5,6 @@
 * @var array
 */
 $routes = [
-    "/docs/trash/" => "/docs/trash/",
+    "/trash/" => "/docs/trash/",
     "/docs/" => "/docs/read/",
 ];

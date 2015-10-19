@@ -86,6 +86,40 @@ class docs_model extends Model {
         return !$db_error;
     }
 
+    function recover_file($file_id, $user) {
+        if ($file_id === false || $file_id <= 0) {
+            return false;
+        }
+
+        $db_error = false;
+        $this->DB->autocommit(false);
+
+        $stmt = $this->DB->prepare("INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`) SELECT `file_id`, `name`, `slug`, `parent`, `type` FROM `trash_files` WHERE `file_id`=?");
+        if (!$stmt->bind_param("s", $file_id)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
+        $stmt = $this->DB->prepare("DELETE FROM `trash_files` WHERE `file_id`=?");
+        if (!$stmt->bind_param("i", $file_id)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
+        if ($db_error) {
+            $this->DB->rollback();
+        } else {
+            $this->DB->commit();
+        }
+
+        $this->DB->autocommit(true);
+        return !$db_error;
+    }
+
     function get_slug_id($parent, $slug) {
         $stmt = $this->DB->prepare("SELECT `id` FROM `files` WHERE `parent`=? AND `slug`=?");
         if (!$stmt->bind_param("is", $parent, $slug)) {
@@ -112,7 +146,7 @@ class docs_model extends Model {
         return $parent;
     }
 
-    function get_file_path($file_id) {
+    function get_file_path($file_id, $include_trash = false) {
         if ($file_id === false) {
             return false;
         }
@@ -121,7 +155,7 @@ class docs_model extends Model {
         }
         $path = '/';
         do {
-            $file = $this->get_file($file_id);
+            $file = $this->get_file($file_id, $include_trash);
             $file_id = $file['parent'];
             $path = '/' . $file['slug'] . $path;
         } while($file_id !== 0);
@@ -161,12 +195,33 @@ class docs_model extends Model {
         return $page_list;
     }
 
-    function get_file($file_id) {
+    function get_file($file_id, $include_trash = false) {
         // Get details of file
         if ($file_id === false) {
             return false;
         }
         $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `type` FROM `files` WHERE `id`=?");
+        if (!$stmt->bind_param("i", $file_id)) {
+            return false;
+        }
+        if (!$stmt->execute()) {
+            return false;
+        }
+        if ($row = $stmt->get_result()->fetch_assoc()) {
+            return $row;
+        } else if($include_trash && $row = $this->get_file_trashed($file_id)) {
+            $row['trashed'] = true;
+            return $row;
+        }
+        return false;
+    }
+
+    function get_file_trashed($file_id) {
+        // Get details of a trashed file
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("SELECT `file_id` as `id`, `name`, `slug`, `parent`, `type` FROM `trash_files` WHERE `file_id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
@@ -323,6 +378,37 @@ class docs_model extends Model {
         }
         $history_list = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         return $history_list;
+    }
+
+    function get_trash_list() {
+        // Get list of files in trash
+        $stmt = $this->DB->prepare("SELECT `id`, `file_id`, `name`, `slug`, `parent`, `type`, `timestamp`, `created_by` FROM `trash_files` ORDER BY `timestamp` DESC");
+        if (!$stmt->execute()) {
+            return false;
+        }
+        $page_list = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        foreach ($page_list as $key => $page) {
+            $page_list[$key]['path'] = $this->get_file_path($page['file_id'], true);
+
+            $parent = $this->get_file($page['parent'], true);
+
+            if ($parent === false) {
+                $page_list[$key]['recoverable'] = false;
+                $page_list[$key]['reason'] = "Cannot find parent, the file is orphan. :/";
+            } else if (array_key_exists('trashed', $parent) && $parent['trashed']) {
+                $page_list[$key]['recoverable'] = false;
+                $page_list[$key]['reason'] = "Parent directory also in trash. Recover parent first.";
+            } else {
+                if ($this->get_slug_id($page['parent'], $page['slug']) !== false) {
+                    $page_list[$key]['recoverable'] = false;
+                    $page_list[$key]['reason'] = "Another file with same name exists in the parent directory.";
+                } else {
+                    $page_list[$key]['recoverable'] = true;
+                    $page_list[$key]['reason'] = "";
+                }
+            }
+        }
+        return $page_list;
     }
 
 }

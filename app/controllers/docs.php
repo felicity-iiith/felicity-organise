@@ -184,4 +184,45 @@ class docs extends Controller {
         }
     }
 
+    function trash() {
+        if (!$this->is_admin && !$this->docs_model->has_permission(0, $this->user)) {
+            header('HTTP/1.0 403 Forbidden');
+            $this->load_view('403');
+            exit();
+        }
+
+        $error = "";
+        $msg = "";
+        if (!empty($_POST["restore_file"]) && isset($_POST["file_id"])) {
+            $file_id = $_POST["file_id"];
+            $recovered = $this->docs_model->recover_file($file_id);
+            if ($recovered === false) {
+                $error = "Could not recover file";
+            } else {
+                $_SESSION['recovered_file'] = $file_id;
+                $this->http->redirect(base_url() . "trash/");
+            }
+        }
+
+        if (isset($_SESSION['recovered_file'])) {
+            $file_id = $_SESSION['recovered_file'];
+            unset($_SESSION['recovered_file']);
+
+            $file = $this->docs_model->get_file($file_id);
+            if ($file !== false) {
+                $msg = ucfirst($file['type']) . ' recovered. See <a href="'
+                    . base_url() . 'docs' . $this->docs_model->get_file_path($file['id'])
+                    . '"> recovered '
+                    . $file['type'] . '</a>.';
+            }
+        }
+
+        $trash_list = $this->docs_model->get_trash_list();
+        $this->load_view('trash', [
+            'files' => $trash_list,
+            'error' => $error,
+            'msg' => $msg
+        ]);
+    }
+
 }
