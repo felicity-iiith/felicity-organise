@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 18, 2015 at 11:57 PM
+-- Generation Time: Oct 19, 2015 at 12:35 PM
 -- Server version: 5.5.44-0ubuntu0.14.04.1-log
 -- PHP Version: 5.5.9-1ubuntu4.13
 
@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `files` (
 
 INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`, `created_by`) VALUES
 (0, 'Felicity ''16', '', -1, 'directory', '');
-
 -- --------------------------------------------------------
 
 --
@@ -82,5 +81,6 @@ CREATE TABLE IF NOT EXISTS `trash_files` (
   `type` enum('directory','file') NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_by` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `file_id` (`file_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
