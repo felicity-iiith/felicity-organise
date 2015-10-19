@@ -2,15 +2,36 @@
 
 class docs_model extends Model {
 
-    function new_file($parent, $name, $slug, $type) {
+    function new_file($parent, $name, $slug, $type, $user) {
+        $db_error = false;
+        $this->DB->autocommit(false);
+
         $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`) VALUES (?, ?, ?, ?)");
         if (!$stmt->bind_param("ssis", $name, $slug, $parent, $type)) {
-            return false;
+            $db_error = true;
         }
         if (!$stmt->execute()) {
-            return false;
+            $db_error = true;
         }
-        return true;
+
+        $insert_id = $stmt->insert_id;
+
+        $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `action`, `created_by`) VALUES (?, 'create', ?)");
+        if (!$stmt->bind_param("is", $insert_id, $user)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
+        if ($db_error) {
+            $this->DB->rollback();
+        } else {
+            $this->DB->commit();
+        }
+
+        $this->DB->autocommit(true);
+        return !$db_error;
     }
 
     function update_file($file_id, $name, $slug, $data, $user) {
@@ -33,7 +54,7 @@ class docs_model extends Model {
         }
 
         if ($file_type != 'directory') {
-            $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `data`, `created_by`) VALUES (?, ?, ?)");
+            $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `data`, `action`, `created_by`) VALUES (?, ?, 'edit', ?)");
             if (!$stmt->bind_param("iss", $file_id, $data, $user)) {
                 $db_error = true;
             }
@@ -76,6 +97,14 @@ class docs_model extends Model {
             $db_error = true;
         }
 
+        $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `action`, `created_by`) VALUES (?, 'delete', ?)");
+        if (!$stmt->bind_param("is", $file_id, $user)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
         if ($db_error) {
             $this->DB->rollback();
         } else {
@@ -104,6 +133,14 @@ class docs_model extends Model {
 
         $stmt = $this->DB->prepare("DELETE FROM `trash_files` WHERE `file_id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
+            $db_error = true;
+        }
+        if (!$stmt->execute()) {
+            $db_error = true;
+        }
+
+        $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `action`, `created_by`) VALUES (?, 'recover', ?)");
+        if (!$stmt->bind_param("is", $file_id, $user)) {
             $db_error = true;
         }
         if (!$stmt->execute()) {
@@ -239,7 +276,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `data` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC LIMIT 1");
+        $stmt = $this->DB->prepare("SELECT `data` FROM `file_data` WHERE `file_id`=? AND `action`='edit' ORDER BY `id` DESC LIMIT 1");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
@@ -353,7 +390,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC");
+        $stmt = $this->DB->prepare("SELECT `id`, `action`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
@@ -365,11 +402,26 @@ class docs_model extends Model {
     }
 
     function get_history_item($file_id, $edit_id) {
-        // Get list of edits for file
         if ($file_id === false || $edit_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `data`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? AND `id`<=? ORDER BY `id` DESC LIMIT 2");
+        $stmt = $this->DB->prepare("SELECT `id`, `file_id`, `action`, `data`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? AND `id`=?");
+        if (!$stmt->bind_param("ii", $file_id, $edit_id)) {
+            return false;
+        }
+        if (!$stmt->execute()) {
+            return false;
+        }
+        $history_item = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $history_item ? $history_item[0] : false;
+    }
+
+    function get_history_diff($file_id, $edit_id) {
+        if ($file_id === false || $edit_id === false) {
+            return false;
+        }
+
+        $stmt = $this->DB->prepare("SELECT `id`, `data`, `action`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? AND `id`<=? AND `action`='edit' ORDER BY `id` DESC LIMIT 2");
         if (!$stmt->bind_param("ii", $file_id, $edit_id)) {
             return false;
         }

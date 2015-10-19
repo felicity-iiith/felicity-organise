@@ -53,7 +53,7 @@ class docs extends Controller {
                 return "Invalid slug";
             }
 
-            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type);
+            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $this->user);
             if ($add === false) {
                 return "Could not add file";
             }
@@ -161,6 +161,9 @@ class docs extends Controller {
                 if ($this->is_admin && isset($_GET["id"])) {
                     $edit_id = $_GET["id"];
                     $file["history_item"] = $this->docs_model->get_history_item($file_id, $edit_id);
+                    if ($file["history_item"] !== false && $file["history_item"]["action"] == 'edit') {
+                        $file["history_diff"] = $this->docs_model->get_history_diff($file_id, $edit_id);
+                    }
                 } else if (isset($_GET["id"])) {
                     $file["perm_error"] = true;
                 }
@@ -195,7 +198,7 @@ class docs extends Controller {
         $msg = "";
         if (!empty($_POST["restore_file"]) && isset($_POST["file_id"])) {
             $file_id = $_POST["file_id"];
-            $recovered = $this->docs_model->recover_file($file_id);
+            $recovered = $this->docs_model->recover_file($file_id, $this->user);
             if ($recovered === false) {
                 $error = "Could not recover file";
             } else {

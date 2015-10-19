@@ -1,3 +1,25 @@
+<?php
+    function get_past($action) {
+        switch ($action) {
+            case 'create':
+                $action = 'created';
+                break;
+            case 'edit':
+                $action = 'edited';
+                break;
+            case 'delete':
+                $action = 'deleted';
+                break;
+            case 'recover':
+                $action = 'recovered';
+                break;
+            default:
+                $action = false;
+                break;
+        };
+        return $action;
+    }
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,13 +43,13 @@
                 <h1 class="file_title"><?= $name ?></h1>
                 <?php
                     $initial = true;
-                    if (isset($history_item)):
-                        $username = explode('@', $history_item[0]["created_by"])[0];
-                        $time = date('d M, Y h:ia', strtotime($history_item[0]["timestamp"]));
-                        if (count($history_item) == 2) {
+                    if (isset($history_diff)):
+                        $username = explode('@', $history_diff[0]["created_by"])[0];
+                        $time = date('d M, Y h:ia', strtotime($history_diff[0]["timestamp"]));
+                        if (count($history_diff) == 2) {
                             $initial = false;
-                            $old_username = explode('@', $history_item[1]["created_by"])[0];
-                            $old_time = date('d M, Y h:ia', strtotime($history_item[1]["timestamp"]));
+                            $old_username = explode('@', $history_diff[1]["created_by"])[0];
+                            $old_time = date('d M, Y h:ia', strtotime($history_diff[1]["timestamp"]));
                         }
                 ?>
                         <h2><?= $username ?>'s<span style="color: #777"> edit on </span><?= $time ?></h2>
@@ -35,12 +57,19 @@
                             <h4>Compared with <?= $old_username ?>'s<span style="color: #777"> edit on </span><?= $old_time ?></h4>
                         <?php endif; ?>
                         <div id="diff"></div>
-                        <div id="newdata" style="display:none"><?= $history_item[0]["data"] ?></div>
-                        <div id="olddata" style="display:none"><?= $initial ? "" : $history_item[1]["data"] ?></div>
+                        <div id="newdata" style="display:none"><?= $history_diff[0]["data"] ?></div>
+                        <div id="olddata" style="display:none"><?= $initial ? "" : $history_diff[1]["data"] ?></div>
                 <?php
                     elseif (!empty($perm_error)):
                 ?>
                         <div class="error">Sorry, you don't have permission to see edit details.</div>
+                <?php
+                    elseif (isset($history_item)):
+                        $username = explode('@', $history_item["created_by"])[0];
+                        $time = date('d M, Y h:ia', strtotime($history_item["timestamp"]));
+                        $action = get_past($history_item['action']);
+                ?>
+                        <h2><?= $username ?><span style="color: #777"> <?= $action ?> file on </span><?= $time ?></h2>
                 <?php
                     endif;
                 ?>
@@ -49,11 +78,12 @@
                     foreach ($history as $edit):
                         $username = explode('@', $edit["created_by"])[0];
                         $time = date('d M, Y h:ia', strtotime($edit["timestamp"]));
+                        $action = get_past($edit['action']);
                 ?>
                         <li>
                             <a href="?history&id=<?= $edit["id"] ?>">
                                 <i class="fa fa-history"></i>
-                                <?= $username ?><span style="color: #777"> edited on </span><?= $time ?>
+                                <?= $username ?><span style="color: #777"> <?= $action ?> on </span><?= $time ?>
                             </a>
                         </li>
                 <?php

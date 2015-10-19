@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 19, 2015 at 12:35 PM
+-- Generation Time: Oct 19, 2015 at 02:00 PM
 -- Server version: 5.5.44-0ubuntu0.14.04.1-log
 -- PHP Version: 5.5.9-1ubuntu4.13
 
@@ -45,6 +45,7 @@ INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`, `created_by`) VALUE
 CREATE TABLE IF NOT EXISTS `file_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_id` int(11) NOT NULL,
+  `action` enum('create','edit','delete','recover') NOT NULL,
   `data` blob NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_by` varchar(255) NOT NULL,
