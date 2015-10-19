@@ -134,7 +134,7 @@ class docs extends Controller {
 
         if ($action == 'edit') {
             if (!$this->is_admin) {
-                $this->http->err_404();
+                $this->http->response_code(404);
             }
 
             $error = $this->edit();
@@ -151,7 +151,7 @@ class docs extends Controller {
                 $file["data"] = $this->docs_model->get_file_data($file_id);
                 $this->load_view("file_edit", $file);
             } else {
-                $this->http->err_404();
+                $this->http->response_code(404);
             }
         } else if ($action == 'history'){
             if ($file_type == "file") {
@@ -170,7 +170,7 @@ class docs extends Controller {
 
                 $this->load_view("file_history", $file);
             } else {
-                $this->http->err_404();
+                $this->http->response_code(404);
             }
         } else {
             if ($file_type == "directory") {
@@ -182,16 +182,14 @@ class docs extends Controller {
                 $file["is_admin"] = $this->is_admin;
                 $this->load_view("file", $file);
             } else {
-                $this->http->err_404();
+                $this->http->response_code(404);
             }
         }
     }
 
     function trash() {
         if (!$this->is_admin && !$this->docs_model->has_permission(0, $this->user)) {
-            header('HTTP/1.0 403 Forbidden');
-            $this->load_view('403');
-            exit();
+            $this->http->response_code(403);
         }
 
         $error = "";
