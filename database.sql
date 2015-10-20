@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS `files` (
 -- Dumping data for table `files`
 --
 
-INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`, `created_by`) VALUES
-(0, 'Felicity ''16', '', -1, 'directory', '');
+INSERT INTO `files` (`id`, `name`, `slug`, `parent`, `type`) VALUES
+(0, 'Felicity ''16', '', -1, 'directory');
 -- --------------------------------------------------------
 
 --
