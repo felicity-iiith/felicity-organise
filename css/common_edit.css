@@ -11,6 +11,10 @@
     transition: none;
 }
 
+#useredit, #filedelete {
+    box-sizing: content-box;
+}
+
 #delete_button {
     display: block;
 }
