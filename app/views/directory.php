@@ -12,15 +12,14 @@
         <div class="container">
             <article class="dir">
                 <h1 class="dir_title"><?= $name ?></h1>
-                <?php
-                    if ($user_can['write_file']):
-                ?>
-                    <div class="admin_panel padded text-right">
+                <div class="admin_panel padded text-right">
+                    <?php if ($user_can['write_file']): ?>
                         <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit / Add file</a>
-                    </div>
-                <?php
-                    endif;
-                ?>
+                    <?php endif; ?>
+                    <?php if ($id == 0 && $user_can['see_global_trash']): ?>
+                        <a href="<?= base_url() ?>trash/" class="btn btn-green"><i class="fa fa-trash"></i> Go to trash</a>
+                    <?php endif; ?>
+                </div>
                 <div class="list-interface">
                     <?php
                         if ($parent != -1) {

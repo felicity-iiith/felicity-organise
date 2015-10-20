@@ -13,6 +13,9 @@
         <div class="container">
             <article class="dir">
                 <h1 class="dir_title">Trash</h1>
+                    <div class="admin_panel padded text-right">
+                        <a href="<?= base_url() ?>docs/" class="btn btn-green"><i class="fa fa-file"></i> Go to docs</a>
+                    </div>
                     <?php if ($error): ?>
                         <div class="error"><?= $error ?></div>
                     <?php endif; ?>
