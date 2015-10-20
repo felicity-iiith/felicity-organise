@@ -17,7 +17,7 @@
                 <h1 class="file_title"><?= $name ?></h1>
                 <aside class="admin_panel padded text-right">
                     <?php
-                        if ($is_admin):
+                        if ($user_can['write_file']):
                     ?>
                     <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit</a>
                     <?php

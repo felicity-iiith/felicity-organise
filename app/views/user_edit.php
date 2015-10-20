@@ -1,3 +1,4 @@
+<?php if ($user_can['manage_user']): ?>
 <div class="padded" id="useredit">
     <form action="" method="post">
         <h2>Users and permissions</h2>
@@ -12,6 +13,7 @@
         ?>
                 <li>
                     <?= $admin["user"] ?>
+                    <span class="grey">(<?= $admin["role"] ?>)</span>
                     <?php
                         if ($inherited):
                     ?>
@@ -40,3 +42,4 @@
         ?>
     </ul>
 </div>
+<?php endif; ?>

@@ -13,15 +13,15 @@
             <article class="dir">
                 <h1 class="dir_title"><?= $name ?></h1>
                 <?php
-                    if ($is_admin):
+                    if ($user_can['write_file']):
                 ?>
-                <div class="admin_panel padded text-right">
-                    <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit / Add file</a>
-                </div>
-                    <?php
-                        endif;
-                    ?>
-                    <div class="list-interface">
+                    <div class="admin_panel padded text-right">
+                        <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit / Add file</a>
+                    </div>
+                <?php
+                    endif;
+                ?>
+                <div class="list-interface">
                     <?php
                         if ($parent != -1) {
                             echo '<a class="btn btn-blue" href="..">Go to parent <i class="fa fa-level-up"></i></a>';

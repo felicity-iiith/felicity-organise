@@ -8,10 +8,10 @@ class docs extends Controller {
         $this->cas->forceAuthentication();
 
         $this->load_model("docs_model");
+        $this->load_model("perms_model");
         $this->load_model("auth_model");
 
         $this->user = $this->cas->getUser();
-        $this->is_admin = $this->auth_model->is_admin($this->user);
     }
 
     private function is_slug_valid($slug) {
@@ -65,10 +65,14 @@ class docs extends Controller {
         if (!empty($_POST["add_user"]) && isset($_POST["file_id"])
             && !empty($_POST["username"])
         ) {
+            if (!$this->user_can['manage_user']) {
+                $this->http->response_code(403);
+            }
+
             $file_id = $_POST["file_id"];
             $username = $_POST["username"];
 
-            $add = $this->docs_model->add_admin($file_id, $username);
+            $add = $this->perms_model->add_user_role($file_id, $username, 'admin');
             if ($add === false) {
                 return "Could not add user";
             }
@@ -80,10 +84,14 @@ class docs extends Controller {
         if (!empty($_POST["revoke_user"]) && isset($_POST["file_id"])
             && !empty($_POST["username"])
         ) {
+            if (!$this->user_can['manage_user']) {
+                $this->http->response_code(403);
+            }
+
             $file_id = $_POST["file_id"];
             $username = $_POST["username"];
 
-            $add = $this->docs_model->remove_admin($file_id, $username);
+            $add = $this->perms_model->remove_user_role($file_id, $username);
             if ($add === false) {
                 return "Could not revoke permissions for user";
             }
@@ -129,36 +137,40 @@ class docs extends Controller {
         $file = $this->docs_model->get_file($file_id);
         $file_type = $file ? $file['type'] : false;
 
-        $this->is_admin = $this->is_admin ||
-            $this->docs_model->has_permission($file_id, $this->user);
+        $this->user_can = $this->perms_model->get_permissions($file_id, $this->user);
 
         if ($action == 'edit') {
-            if (!$this->is_admin) {
-                $this->http->response_code(404);
+            if (!$this->user_can['write_file']) {
+                $this->http->response_code(403);
             }
 
             $error = $this->edit();
 
             if ($file_type == "directory") {
                 $file["error"] = $error;
-                $file["admins"] = $this->docs_model->get_admin_list($file_id);
+                $file["admins"] = $this->perms_model->get_user_list($file_id);
                 $file["user"] = $this->user;
+                $file["user_can"] = $this->user_can;
                 $this->load_view("directory_edit", $file);
             } else if ($file_type == "file") {
                 $file["error"] = $error;
-                $file["admins"] = $this->docs_model->get_admin_list($file_id);
+                $file["admins"] = $this->perms_model->get_user_list($file_id);
                 $file["user"] = $this->user;
+                $file["user_can"] = $this->user_can;
                 $file["data"] = $this->docs_model->get_file_data($file_id);
                 $this->load_view("file_edit", $file);
             } else {
                 $this->http->response_code(404);
             }
         } else if ($action == 'history'){
+            if (!$this->user_can['read_file']) {
+                $this->http->response_code(403);
+            }
             if ($file_type == "file") {
                 $file["history"] = $this->docs_model->get_history($file_id);
 
-                $file["is_admin"] = $this->is_admin;
-                if ($this->is_admin && isset($_GET["id"])) {
+                $file["user_can"] = $this->user_can;
+                if ($this->user_can["see_history_detail"] && isset($_GET["id"])) {
                     $edit_id = $_GET["id"];
                     $file["history_item"] = $this->docs_model->get_history_item($file_id, $edit_id);
                     if ($file["history_item"] !== false && $file["history_item"]["action"] == 'edit') {
@@ -173,13 +185,16 @@ class docs extends Controller {
                 $this->http->response_code(404);
             }
         } else {
+            if (!$this->user_can['read_file']) {
+                $this->http->response_code(403);
+            }
             if ($file_type == "directory") {
                 $file["data"] = $this->docs_model->get_directory($file_id);
-                $file["is_admin"] = $this->is_admin;
+                $file["user_can"] = $this->user_can;
                 $this->load_view("directory", $file);
             } else if ($file_type == "file") {
                 $file["data"] = $this->docs_model->get_file_data($file_id);
-                $file["is_admin"] = $this->is_admin;
+                $file["user_can"] = $this->user_can;
                 $this->load_view("file", $file);
             } else {
                 $this->http->response_code(404);
@@ -188,7 +203,8 @@ class docs extends Controller {
     }
 
     function trash() {
-        if (!$this->is_admin && !$this->docs_model->has_permission(0, $this->user)) {
+        $user_can = $this->perms_model->get_permissions(0, $this->user);
+        if (!$user_can['see_global_trash']) {
             $this->http->response_code(403);
         }
 
