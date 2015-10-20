@@ -30,6 +30,7 @@ html, body {
     flex: 1 1 auto;
     display: flex;
     margin-top: 5px;
+    min-height: 10em;
 }
 #file_edit_contain, #file_md {
     flex: 1 1;

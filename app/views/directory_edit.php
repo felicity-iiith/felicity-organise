@@ -33,6 +33,14 @@
                                 <option value="directory">Directory</option>
                             </select>
                         </label>
+                        <label for="type">Default role:
+                            <select class="text-input" name="default_role" required>
+                                <option value="none">None</option>
+                                <option value="reader" selected>Reader</option>
+                                <option value="author">Author</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </label>
 
                         <input type="submit" class="btn-green" name="add" value="Add"/>
                     </form>

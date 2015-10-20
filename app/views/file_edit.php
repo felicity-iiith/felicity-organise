@@ -67,7 +67,9 @@
     <body onload="setupEdit()">
         <nav>
             <a class="btn btn-blue" href="."><i class="fa fa-arrow-left"></i> Go back to file <span id="ignore_change"></span></a>
+            <?php if ($user_can['manage_user']): ?>
             <a class="btn btn-blue" href="#useredit"><i class="fa fa-user"></i> Edit user permissions (scroll down) <span id="ignore_change"></span></a>
+            <?php endif; ?>
         </nav>
         <?php if ($error): ?>
         <div class="error"><?= $error ?></div>

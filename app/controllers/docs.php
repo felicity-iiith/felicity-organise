@@ -48,18 +48,35 @@ class docs extends Controller {
             $name = $_POST["name"];
             $slug = $_POST["slug"];
             $type = $_POST["type"];
+            $default_role = $_POST["default_role"];
 
             if (!$this->is_slug_valid($slug)) {
                 return "Invalid slug";
             }
 
-            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $this->user);
+            $add = $this->docs_model->new_file($parent_id, $name, $slug, $type, $default_role, $this->user);
             if ($add === false) {
                 return "Could not add file";
             }
 
             $path = $this->docs_model->get_file_path($parent_id) . $slug . "/";
             $this->http->redirect(base_url() . "docs" . $path . "?edit");
+        }
+
+        if (!empty($_POST["update_default_role"]) && isset($_POST["file_id"])) {
+            if (!$this->user_can['manage_user']) {
+                $this->http->response_code(403);
+            }
+
+            $file_id = $_POST["file_id"];
+            $default_role = $_POST["default_role"];
+
+            if (false === $this->perms_model->set_default_role($file_id, $default_role)) {
+                return "Could not update default role";
+            }
+
+            $path = $this->docs_model->get_file_path($file_id);
+            $this->http->redirect(base_url() . "docs" . $path . "?edit#useredit");
         }
 
         if (!empty($_POST["add_user"]) && isset($_POST["file_id"])
@@ -71,8 +88,9 @@ class docs extends Controller {
 
             $file_id = $_POST["file_id"];
             $username = $_POST["username"];
+            $role = $_POST["role"];
 
-            $add = $this->perms_model->add_user_role($file_id, $username, 'admin');
+            $add = $this->perms_model->add_user_role($file_id, $username, $role);
             if ($add === false) {
                 return "Could not add user";
             }

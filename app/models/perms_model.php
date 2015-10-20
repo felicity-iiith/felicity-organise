@@ -103,6 +103,21 @@ class perms_model extends Model {
         return false;
     }
 
+    function set_default_role($file_id, $role) {
+        // Set default role for a file
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("UPDATE `files` SET `default_role`=? WHERE `id`=?");
+        if (!$stmt->bind_param("si", $role, $file_id)) {
+            return false;
+        }
+        if (!$stmt->execute()) {
+            return false;
+        }
+        return true;
+    }
+
     private function file_get_user_role($file_id, $user) {
         // Check permissions for a single file
         if ($file_id === false) {

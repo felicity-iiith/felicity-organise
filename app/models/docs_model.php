@@ -2,12 +2,12 @@
 
 class docs_model extends Model {
 
-    function new_file($parent, $name, $slug, $type, $user) {
+    function new_file($parent, $name, $slug, $type, $default_role, $user) {
         $db_error = false;
         $this->DB->autocommit(false);
 
-        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`) VALUES (?, ?, ?, ?)");
-        if (!$stmt->bind_param("ssis", $name, $slug, $parent, $type)) {
+        $stmt = $this->DB->prepare("INSERT INTO `files` (`name`, `slug`, `parent`, `type`, `default_role`) VALUES (?, ?, ?, ?, ?)");
+        if (!$stmt->bind_param("ssiss", $name, $slug, $parent, $type, $default_role)) {
             $db_error = true;
         }
         if (!$stmt->execute()) {
@@ -237,7 +237,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `type` FROM `files` WHERE `id`=?");
+        $stmt = $this->DB->prepare("SELECT `id`, `name`, `slug`, `parent`, `type`, `default_role` FROM `files` WHERE `id`=?");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
