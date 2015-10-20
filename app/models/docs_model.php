@@ -453,7 +453,7 @@ class docs_model extends Model {
             } else {
                 if ($this->get_slug_id($page['parent'], $page['slug']) !== false) {
                     $page_list[$key]['recoverable'] = false;
-                    $page_list[$key]['reason'] = "Another file with same name exists in the parent directory.";
+                    $page_list[$key]['reason'] = "A file currently exists at this path.";
                 } else {
                     $page_list[$key]['recoverable'] = true;
                     $page_list[$key]['reason'] = "";
