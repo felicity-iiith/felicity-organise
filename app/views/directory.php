@@ -17,6 +17,7 @@
                 ?>
                 <div class="admin_panel padded text-right">
                     <a href="?edit" id="edit-btn" class="btn btn-blue"><i class="fa fa-pencil"></i> Edit / Add file</a>
+                    <a href="<?= base_url() ?>trash/" class="btn btn-green"><i class="fa fa-trash"></i> Go to trash</a>
                 </div>
                     <?php
                         endif;
