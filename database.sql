@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Oct 20, 2015 at 07:14 PM
+-- Generation Time: Oct 21, 2015 at 02:17 AM
 -- Server version: 5.5.44-0ubuntu0.14.04.1-log
 -- PHP Version: 5.5.9-1ubuntu4.13
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   `slug` varchar(255) NOT NULL,
   `parent` int(11) NOT NULL,
   `type` enum('directory','file') NOT NULL,
-  `default_role` enum('none','reader','author','admin') NOT NULL,
+  `default_role` enum('none','reader','author','admin') NOT NULL DEFAULT 'reader',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueName` (`slug`,`parent`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
