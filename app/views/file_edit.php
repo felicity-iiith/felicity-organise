@@ -78,6 +78,7 @@
         <article class="file">
             <form action="" method="post" class="file_edit">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
+                <input type="hidden" name="version_id" value="<?= $version_id ?>"/>
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= isset($unsaved) ? $unsaved["name"] : $name ?>" required />
                     <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= isset($unsaved) ? $unsaved["slug"] : $slug ?>" required />

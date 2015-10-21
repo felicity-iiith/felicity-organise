@@ -289,6 +289,24 @@ class docs_model extends Model {
         return false;
     }
 
+    function get_latest_version_id($file_id) {
+        // Get latest version id
+        if ($file_id === false) {
+            return false;
+        }
+        $stmt = $this->DB->prepare("SELECT `id` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC LIMIT 1");
+        if (!$stmt->bind_param("i", $file_id)) {
+            return false;
+        }
+        if (!$stmt->execute()) {
+            return false;
+        }
+        if ($row = $stmt->get_result()->fetch_row()) {
+            return $row[0];
+        }
+        return false;
+    }
+
     function get_history($file_id) {
         // Get list of edits for file
         if ($file_id === false) {

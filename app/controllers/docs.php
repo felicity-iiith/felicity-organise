@@ -27,9 +27,15 @@ class docs extends Controller {
             $name = htmlspecialchars($_POST["name"]);
             $slug = htmlspecialchars(@$_POST["slug"] ?: "");
             $data = htmlspecialchars(@$_POST["data"] ?: "");
+            $version_id = @$_POST["version_id"] ?: 0;
 
             if ($slug && !$this->is_slug_valid($slug)) {
                 return "Invalid slug";
+            }
+
+            $latest_version = $this->docs_model->get_latest_version_id($file_id);
+            if ($latest_version > $version_id) {
+                return "Cannot save. Someone else also edited the file";
             }
 
             $save = $this->docs_model->update_file($file_id, $name, $slug, $data, $this->user);
@@ -164,17 +170,15 @@ class docs extends Controller {
 
             $error = $this->edit();
 
+            $file["error"] = $error;
+            $file["admins"] = $this->perms_model->get_user_list($file_id);
+            $file["user"] = $this->user;
+            $file["user_can"] = $this->user_can;
+            $file["version_id"] = $this->docs_model->get_latest_version_id($file_id);
+
             if ($file_type == "directory") {
-                $file["error"] = $error;
-                $file["admins"] = $this->perms_model->get_user_list($file_id);
-                $file["user"] = $this->user;
-                $file["user_can"] = $this->user_can;
                 $this->load_view("directory_edit", $file);
             } else if ($file_type == "file") {
-                $file["error"] = $error;
-                $file["admins"] = $this->perms_model->get_user_list($file_id);
-                $file["user"] = $this->user;
-                $file["user_can"] = $this->user_can;
                 $file["data"] = $this->docs_model->get_file_data($file_id);
                 if ($file["error"] && isset($_POST["name"])) {
                     $file["unsaved"] = [

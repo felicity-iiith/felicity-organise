@@ -49,6 +49,7 @@
                     <form class="block" action="" method="post">
                         <h2>Rename directory</h2>
                         <input type="hidden" name="file_id" value="<?= $id ?>"/>
+                        <input type="hidden" name="version_id" value="<?= $version_id ?>"/>
                         <label for="name">Name: <input type="text" name="name" value="<?= $name ?>" required /></label>
                         <?php if ($id != 0): ?>
                             <label for="slug">Slug: <input type="text" name="slug" value="<?= $slug ?>" required /></label>
