@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title><?= $name ?> - Felicity'16 Organise</title>
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
+        <script src="<?= base_url() ?>js/common.js"></script>
         <script src="<?= base_url() ?>js/common_edit.js"></script>
         <link rel="stylesheet" href="<?= base_url() ?>css/thoda.min.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
@@ -25,9 +26,9 @@
             }
             function updateMD () {
                 // Update ignore changes button
-                if (origFile.name != file_name_edit.value
-                    || origFile.slug != file_slug_edit.value
-                    || origFile.data != file_md_edit.value
+                if (origFile.name != escapeHtml(file_name_edit.value) ||
+                    origFile.slug != escapeHtml(file_slug_edit.value) ||
+                    origFile.data != escapeHtml(file_md_edit.value)
                 ) {
                     ignore_change.innerHTML = "(Discard changes)";
                 } else {
@@ -48,9 +49,9 @@
                 dummyText = document.getElementById('dummyTextarea');
                 ignore_change = document.getElementById('ignore_change');
                 origFile = {
-                    name: file_name_edit.value,
-                    slug: file_slug_edit.value,
-                    data: file_md_edit.value,
+                    name: document.getElementById('orig_file_name').innerHTML,
+                    slug: document.getElementById('orig_file_slug').innerHTML,
+                    data: document.getElementById('orig_file_data').innerHTML,
                 };
                 file_md_edit.addEventListener('keypress', setHeight);
                 file_md_edit.addEventListener('keyup', setHeight);
@@ -78,18 +79,23 @@
             <form action="" method="post" class="file_edit">
                 <input type="hidden" name="file_id" value="<?= $id ?>"/>
                 <div class="file_title_edit">
-                    <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= $name ?>" required />
-                    <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= $slug ?>" required />
+                    <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= isset($unsaved) ? $unsaved["name"] : $name ?>" required />
+                    <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= isset($unsaved) ? $unsaved["slug"] : $slug ?>" required />
                     <input type="submit" class="btn btn-green" name="save" value="Save page"/>
+                </div>
+                <div id="orig_file">
+                    <div id="orig_file_name" hidden><?= $name ?></div>
+                    <div id="orig_file_slug" hidden><?= $slug ?></div>
+                    <div id="orig_file_data" hidden><?= $data ?></div>
                 </div>
                 <div class="editor">
                     <div id="file_edit_contain">
-                        <textarea id="file_md_edit" class="file_content" name="data" placeholder="Write your markdown text here." ><?= $data ?></textarea>
+                        <textarea id="file_md_edit" class="file_content" name="data"
+                            placeholder="Write your markdown text here."
+                            ><?= isset($unsaved) ? $unsaved["data"] : $data ?></textarea>
                         <textarea id="dummyTextarea"></textarea>
                     </div>
-                    <section id="file_md" class="file_content">
-                        <?= $data ?>
-                    </section>
+                    <section id="file_md" class="file_content"></section>
                 </div>
             </form>
             <?php

@@ -24,9 +24,9 @@ class docs extends Controller {
             && (!empty($_POST["slug"]) || $_POST["file_id"] == 0)
         ) {
             $file_id = $_POST["file_id"];
-            $name = $_POST["name"];
-            $slug = @$_POST["slug"] ?: "";
-            $data = @$_POST["data"] ?: "";
+            $name = htmlspecialchars($_POST["name"]);
+            $slug = htmlspecialchars(@$_POST["slug"] ?: "");
+            $data = htmlspecialchars(@$_POST["data"] ?: "");
 
             if ($slug && !$this->is_slug_valid($slug)) {
                 return "Invalid slug";
@@ -176,6 +176,13 @@ class docs extends Controller {
                 $file["user"] = $this->user;
                 $file["user_can"] = $this->user_can;
                 $file["data"] = $this->docs_model->get_file_data($file_id);
+                if ($file["error"] && isset($_POST["name"])) {
+                    $file["unsaved"] = [
+                        "name" => htmlspecialchars($_POST["name"]),
+                        "slug" => htmlspecialchars(@$_POST["slug"] ?: ""),
+                        "data" => htmlspecialchars(@$_POST["data"] ?: ""),
+                    ];
+                }
                 $this->load_view("file_edit", $file);
             } else {
                 $this->http->response_code(404);
