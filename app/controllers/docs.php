@@ -158,6 +158,10 @@ class docs extends Controller {
         }
 
         $file_id = $this->docs_model->get_path_id($path);
+        if ($file_id === false) {
+            $this->http->response_code(404);
+        }
+
         $file = $this->docs_model->get_file($file_id);
         $file_type = $file ? $file['type'] : false;
 
