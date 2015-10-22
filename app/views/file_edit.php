@@ -6,12 +6,16 @@
         <script src="<?= base_url() ?>js/lib/marked.min.js"></script>
         <script src="<?= base_url() ?>js/common.js"></script>
         <script src="<?= base_url() ?>js/common_edit.js"></script>
+        <script src="<?= base_url() ?>js/file_edit.js"></script>
         <link rel="stylesheet" href="<?= base_url() ?>css/thoda.min.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/common_edit.css">
         <link rel="stylesheet" href="<?= base_url() ?>css/file.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        <script src="<?= base_url() ?>js/file_edit.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+        <script>
+            var base_url = "<?= base_url() ?>";
+        </script>
     </head>
     <body onload="setupEdit()">
         <nav>
@@ -21,12 +25,12 @@
             <?php endif; ?>
         </nav>
         <?php if ($error): ?>
-        <div class="error"><?= $error ?></div>
+        <div class="error" id="error_msg"><?= $error ?></div>
         <?php endif; ?>
         <article class="file">
             <form action="" method="post" class="file_edit">
-                <input type="hidden" name="file_id" value="<?= $id ?>"/>
-                <input type="hidden" name="version_id" value="<?= $version_id ?>"/>
+                <input type="hidden" name="file_id" value="<?= $id ?>" id="file_id"/>
+                <input type="hidden" name="version_id" value="<?= $version_id ?>" id="version_id"/>
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= isset($unsaved) ? $unsaved["name"] : $name ?>" required />
                     <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= isset($unsaved) ? $unsaved["slug"] : $slug ?>" required />

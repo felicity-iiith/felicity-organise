@@ -48,3 +48,27 @@ nav {
 li {
     line-height: 1.45em;
 }
+
+.notifArea {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+
+.notifArea .notif {
+    margin-top: 0.5em;
+    background: #eee;
+    padding: 0.7em;
+}
+
+.notifArea .notif .notifMsg {
+}
+
+.notifArea .notif .notifBtn button {
+    margin-top: 0.5em;
+    margin-left: 0.5em;
+}
+
+.notifArea .notif .notifBtn button:first-of-type {
+    margin-left: 0em;
+}

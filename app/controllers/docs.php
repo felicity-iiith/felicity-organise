@@ -183,13 +183,16 @@ class docs extends Controller {
             if ($file_type == "directory") {
                 $this->load_view("directory_edit", $file);
             } else if ($file_type == "file") {
-                $file["data"] = $this->docs_model->get_file_data($file_id);
                 if ($file["error"] && isset($_POST["name"])) {
+                    $file["version_id"] = @$_POST["version_id"] ?: 0;
+                    $file["data"] = $this->docs_model->get_file_data_version($file_id, $file["version_id"]);
                     $file["unsaved"] = [
                         "name" => htmlspecialchars($_POST["name"]),
                         "slug" => htmlspecialchars(@$_POST["slug"] ?: ""),
                         "data" => htmlspecialchars(@$_POST["data"] ?: ""),
                     ];
+                } else {
+                    $file["data"] = $this->docs_model->get_file_data($file_id);
                 }
                 $this->load_view("file_edit", $file);
             } else {

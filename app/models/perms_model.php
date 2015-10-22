@@ -198,6 +198,10 @@ class perms_model extends Model {
     }
 
     function get_role_permissions($role) {
+        if ($role === false) {
+            return false;
+        }
+
         $perm_list = $this->role_permissions[$role];
 
         $user_can = [];
@@ -213,7 +217,12 @@ class perms_model extends Model {
     }
 
     function get_permissions($file_id, $user) {
-        if ($file_id === false || !$user) {
+        if ($file_id === false) {
+            return false;
+        }
+
+        // Return false if file does not exists
+        if (false === $this->docs_model->get_file_type($file_id)) {
             return false;
         }
 
