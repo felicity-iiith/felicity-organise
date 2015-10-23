@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `files` (
   `default_role` enum('none','reader','author','admin') NOT NULL DEFAULT 'reader',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueName` (`slug`,`parent`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Dumping data for table `files`
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `file_data` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `file_permissions` (
   `role` enum('none','reader','author','admin') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniqueUser` (`file_id`,`user`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -85,4 +85,4 @@ CREATE TABLE IF NOT EXISTS `trash_files` (
   `created_by` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `file_id` (`file_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
