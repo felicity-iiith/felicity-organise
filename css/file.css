@@ -48,6 +48,7 @@ html, body {
     flex: 1;
 }
 #dummyTextarea {
+    font-family: monospace;
     visibility: hidden;
     position: absolute;
     width: 100%;
