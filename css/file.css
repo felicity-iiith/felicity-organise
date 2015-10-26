@@ -41,6 +41,7 @@ html, body {
     flex-direction: column;
 }
 #file_md_edit {
+    font-family: monospace;
     outline: none;
     border: none;
     resize: none;
