@@ -84,6 +84,9 @@
                             <a href="?history&id=<?= $edit["id"] ?>">
                                 <i class="fa fa-history"></i>
                                 <?= $username ?><span style="color: #777"> <?= $action ?> on </span><?= $time ?>
+                                <?php if (!empty($edit['comment'])): ?>
+                                <span style="color: #777">(Comment: <em><?= $edit['comment'] ?></em>)</span>
+                                <?php endif; ?>
                             </a>
                         </li>
                 <?php

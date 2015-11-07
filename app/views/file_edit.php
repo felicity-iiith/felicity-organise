@@ -34,7 +34,10 @@
                 <div class="file_title_edit">
                     <label for="filename">Name: </label><input type="text" name="name" id="editname" value="<?= isset($unsaved) ? $unsaved["name"] : $name ?>" required />
                     <label for="slug">Slug: </label><input type="text" name="slug" id="editslug" value="<?= isset($unsaved) ? $unsaved["slug"] : $slug ?>" required />
-                    <input type="submit" class="btn btn-green" name="save" value="Save page"/>
+                </div>
+                <div class="file_title_edit">
+                    <label for="comment">Comment (optional): </label><input type="text" name="comment" id="comment">
+                    <input type="submit" class="btn btn-green pull-right" name="save" value="Save page"/>
                 </div>
                 <div id="orig_file">
                     <div id="orig_file_name" hidden><?= $name ?></div>

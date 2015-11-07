@@ -27,6 +27,7 @@ class docs extends Controller {
             $name = htmlspecialchars($_POST["name"]);
             $slug = htmlspecialchars(@$_POST["slug"] ?: "");
             $data = htmlspecialchars(@$_POST["data"] ?: "");
+            $comment = htmlspecialchars(@$_POST["comment"] ?: "");
             $version_id = @$_POST["version_id"] ?: 0;
 
             if ($slug && !$this->is_slug_valid($slug)) {
@@ -38,7 +39,7 @@ class docs extends Controller {
                 return "Cannot save. Someone else also edited the file";
             }
 
-            $save = $this->docs_model->update_file($file_id, $name, $slug, $data, $this->user);
+            $save = $this->docs_model->update_file($file_id, $name, $slug, $data, $this->user, $comment);
             if ($save === false) {
                 return "Could not save file";
             }
