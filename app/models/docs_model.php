@@ -34,7 +34,7 @@ class docs_model extends Model {
         return !$db_error;
     }
 
-    function update_file($file_id, $name, $slug, $data, $user) {
+    function update_file($file_id, $name, $slug, $data, $user, $comment = '') {
         if ($file_id === false) {
             return false;
         }
@@ -54,8 +54,8 @@ class docs_model extends Model {
         }
 
         if ($file_type != 'directory') {
-            $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `data`, `action`, `created_by`) VALUES (?, ?, 'edit', ?)");
-            if (!$stmt->bind_param("iss", $file_id, $data, $user)) {
+            $stmt = $this->DB->prepare("INSERT INTO `file_data` (`file_id`, `data`, `action`, `created_by`, `comment`) VALUES (?, ?, 'edit', ?, ?)");
+            if (!$stmt->bind_param("isss", $file_id, $data, $user, $comment)) {
                 $db_error = true;
             }
             if (!$stmt->execute()) {
@@ -330,7 +330,7 @@ class docs_model extends Model {
         if ($file_id === false) {
             return false;
         }
-        $stmt = $this->DB->prepare("SELECT `id`, `action`, `timestamp`, `created_by` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC");
+        $stmt = $this->DB->prepare("SELECT `id`, `action`, `timestamp`, `created_by`, `comment` FROM `file_data` WHERE `file_id`=? ORDER BY `id` DESC");
         if (!$stmt->bind_param("i", $file_id)) {
             return false;
         }
