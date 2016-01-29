@@ -37,5 +37,6 @@
                 file_md.innerHTML = marked(mdText);
             })();
         </script>
+        <?php $this->load_fragment('google_analytics'); ?>
     </body>
 </html>

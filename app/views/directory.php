@@ -68,5 +68,6 @@
             });
         }
         </script>
+        <?php $this->load_fragment('google_analytics'); ?>
     </body>
 </html>

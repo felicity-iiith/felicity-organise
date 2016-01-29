@@ -41,5 +41,6 @@
                 <p class="text-center padded" style="font-size:2em;">Let's make Felicity (more) awesome!</p>
             </article>
         </div>
+        <?php $this->load_fragment('google_analytics'); ?>
     </body>
 </html>

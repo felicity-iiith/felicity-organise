@@ -61,5 +61,6 @@
                 $this->load_fragment('delete_file');
             ?>
         </article>
+        <?php $this->load_fragment('google_analytics'); ?>
     </body>
 </html>

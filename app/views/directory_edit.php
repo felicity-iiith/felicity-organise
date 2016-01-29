@@ -82,5 +82,6 @@
                 newname.addEventListener('blur', updateSlug);
             })();
         </script>
+        <?php $this->load_fragment('google_analytics'); ?>
     </body>
 </html>
